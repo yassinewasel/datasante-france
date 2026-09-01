@@ -2,7 +2,7 @@
 
 Application Flask d'exploration et de comparaison de donnees de sante en France. Le depot propose une demonstration SQLite reproductible et hors ligne, ainsi qu'un mode reel configurable utilisant l'API Data Ameli.
 
-![Accueil DataSante](docs/images/home.png)
+<img src="docs/images/home.png" alt="Accueil DataSante" width="900">
 
 ## Fonctionnalites
 
@@ -10,15 +10,16 @@ Application Flask d'exploration et de comparaison de donnees de sante en France.
 - effectifs, densites, honoraires, prescriptions et pathologies ;
 - comparaisons, graphiques Chart.js, tableaux et carte Leaflet ;
 - base de demonstration synthetique generee localement ;
+- pipeline ETL Data Ameli pagine, idempotent et teste hors ligne ;
 - client Data Ameli conserve pour un usage reel explicite.
 
 ## Captures
 
 | Comparaisons | Indicateurs |
 | --- | --- |
-| ![Comparaisons](docs/images/comparisons.png) | ![Indicateurs](docs/images/indicators.png) |
+| <img src="docs/images/comparisons.png" alt="Comparaisons" width="440"> | <img src="docs/images/indicators.png" alt="Indicateurs" width="440"> |
 
-![Honoraires](docs/images/honoraires.png)
+<img src="docs/images/honoraires.png" alt="Honoraires" width="700">
 
 ## Demarrage rapide - PowerShell
 
@@ -52,7 +53,13 @@ python -m scripts.init_demo_db --force
 
 ## Mode reel
 
-Definir `APP_MODE=real` et `DATABASE_URL` vers une base SQLAlchemy compatible. Dans ce mode, les mesures sont demandees a Data Ameli ; aucune collecte reelle n'est executee automatiquement.
+Definir `APP_MODE=real` et `DATABASE_URL` vers une base SQLAlchemy compatible. Le pipeline issu du travail de donnees SAE 2.04 charge les neuf dimensions sans doublons :
+
+```powershell
+python -m etl.pipeline --collect
+```
+
+La suppression des tables n'est jamais implicite. Voir [le fonctionnement et les protections du pipeline](docs/data-pipeline.md).
 
 ## Tests
 
