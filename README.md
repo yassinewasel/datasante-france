@@ -2,7 +2,7 @@
 
 Application Flask d'exploration et de comparaison de donnees de sante en France. Le depot propose une demonstration SQLite reproductible et hors ligne, ainsi qu'un mode reel configurable utilisant l'API Data Ameli.
 
-<img src="docs/images/home.png" alt="Accueil DataSante" width="900">
+<img src="docs/images/home.png" alt="Accueil DataSante et carte interactive" width="900">
 
 ## Fonctionnalites
 
@@ -15,15 +15,13 @@ Application Flask d'exploration et de comparaison de donnees de sante en France.
 
 ## Captures
 
-### Carte interactive
-
-<img src="docs/images/map.png" alt="Carte interactive des territoires de sante" width="700">
+| Pathologies | Honoraires |
+| --- | --- |
+| <img src="docs/images/pathologies.png" alt="Pathologies" width="440"> | <img src="docs/images/honoraires.png" alt="Honoraires" width="440"> |
 
 | Comparaisons | Indicateurs |
 | --- | --- |
 | <img src="docs/images/comparisons.png" alt="Comparaisons" width="440"> | <img src="docs/images/indicators.png" alt="Indicateurs" width="440"> |
-
-<img src="docs/images/honoraires.png" alt="Honoraires" width="700">
 
 ## Demarrage rapide - PowerShell
 
