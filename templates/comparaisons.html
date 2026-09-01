@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block titre %}Comparaisons - Data Santé{% endblock %}
+
+{% block contenu %}
+<main class="main">
+  <div class="page-heading"><p class="eyebrow">Comparaison multi-séries</p><h1 class="section-title">Comparer deux territoires, professions et périodes</h1></div>
+  <section class="card comparison-card">
+    <form class="comparison-controls comparison-controls-wide" id="comparison-form" data-url="{{ url_for('api.comparaison_series') }}" data-departements-url="{{ url_for('api.departements', region_id=0) }}">
+      <div><label for="compare-year-start">Année de début</label><select id="compare-year-start" name="annee_debut" required>{% for annee in annees|reverse %}<option value="{{ annee }}" {% if annee == 2018 %}selected{% endif %}>{{ annee }}</option>{% endfor %}</select></div>
+      <div><label for="compare-year-end">Année de fin</label><select id="compare-year-end" name="annee_fin" required>{% for annee in annees %}<option value="{{ annee }}" {% if annee == 2023 %}selected{% endif %}>{{ annee }}</option>{% endfor %}</select></div>
+      <div class="comparison-series-heading">Série A</div>
+      <div><label for="compare-profession-a">Profession A</label><select id="compare-profession-a" name="profession_a_id" required>{% for profession in professions %}<option value="{{ profession.id }}" {% if profession.id == 12 %}selected{% endif %}>{{ profession.libelle }}</option>{% endfor %}</select></div>
+      <div><label for="compare-region-a">Région A</label><select id="compare-region-a" name="region_a_id" required>{% for region in regions %}<option value="{{ region.id }}" {% if region.code == "11" %}selected{% endif %}>{{ region.display_libelle }}</option>{% endfor %}</select></div>
+      <div><label for="compare-dept-a">Département A</label><select id="compare-dept-a" name="departement_a_id"><option value="">Toute la région</option></select></div>
+      <div class="comparison-series-heading">Série B</div>
+      <div><label for="compare-profession-b">Profession B</label><select id="compare-profession-b" name="profession_b_id" required>{% for profession in professions %}<option value="{{ profession.id }}" {% if profession.id == 12 %}selected{% endif %}>{{ profession.libelle }}</option>{% endfor %}</select></div>
+      <div><label for="compare-region-b">Région B</label><select id="compare-region-b" name="region_b_id" required>{% for region in regions %}<option value="{{ region.id }}" {% if region.code == "84" %}selected{% endif %}>{{ region.display_libelle }}</option>{% endfor %}</select></div>
+      <div><label for="compare-dept-b">Département B</label><select id="compare-dept-b" name="departement_b_id"><option value="">Toute la région</option></select></div>
+      <button class="button" type="submit">Comparer les séries</button>
+    </form>
+    <div class="comparison-status" id="comparison-status">Configurez les deux séries, puis lancez la comparaison.</div>
+  </section>
+  <section class="dashboard-grid two-columns comparison-results">
+    <article class="card chart-card"><div class="card-heading"><h2>Effectif au dernier point disponible</h2><span>Histogramme</span></div><div class="chart-panel"><canvas id="comparisonEffectif"></canvas></div></article>
+    <article class="card chart-card"><div class="card-heading"><h2>Évolution des effectifs</h2><span>Courbes</span></div><div class="chart-panel"><canvas id="comparisonEvolution"></canvas></div></article>
+  </section>
+  <section class="dashboard-grid two-columns comparison-results">
+    <article class="card chart-card"><div class="card-heading"><h2>Répartition par sexe</h2><span>Dernière année</span></div><div class="chart-panel"><canvas id="comparisonSexes"></canvas></div></article>
+    <article class="card chart-card"><div class="card-heading"><h2>Répartition par âge</h2><span>Dernière année</span></div><div class="chart-panel"><canvas id="comparisonAges"></canvas></div></article>
+  </section>
+  <section class="card table-card">
+    <div class="card-heading"><h2>Comparaison année par année</h2></div>
+    <table class="data-table" data-table-name="comparaison-series" id="comparison-table"><thead><tr><th>Année</th><th>Effectif A</th><th>Densité A</th><th>Effectif B</th><th>Densité B</th></tr></thead><tbody><tr><td colspan="5">Lancez une comparaison pour remplir le tableau.</td></tr></tbody></table>
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comparaisons.js') }}"></script>
+{% endblock %}

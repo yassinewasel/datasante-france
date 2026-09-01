@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block titre %}À propos - Data Santé{% endblock %}
+
+{% block contenu %}
+<main class="main">
+  <div class="page-heading">
+    <p class="eyebrow">Présentation</p>
+    <h1 class="section-title">SAÉ 2.01 - Développement d'une application web</h1>
+  </div>
+
+  <section class="dashboard-grid two-columns">
+    <article class="card about-card">
+      <div class="card-heading"><h2>Nom du projet</h2><span>DataSanté</span></div>
+      <p>
+        DataSanté est une application web de visualisation des données de santé en France.
+        Elle permet de consulter des effectifs, densités, indicateurs territoriaux et comparaisons
+        à partir d'un formulaire, d'une carte interactive et de graphiques.
+      </p>
+    </article>
+
+    <article class="card about-card">
+      <div class="card-heading"><h2>Membres du groupe</h2><span>Équipe</span></div>
+      <ul class="clean-list">
+        <li>ALLOUNE Abdelwadoud</li>
+        <li>APELA AKUNDE Abdou</li>
+        <li>BERRICHE Djibril</li>
+        <li>WASEL Yassine</li>
+      </ul>
+    </article>
+
+    <article class="card about-card">
+      <div class="card-heading"><h2>Objectifs</h2><span>SAÉ</span></div>
+      <ul class="clean-list">
+        <li>Construire une application Flask organisée selon l'architecture MVC.</li>
+        <li>Exploiter la base SAE 2.04 pour alimenter les listes et référentiels.</li>
+        <li>Interroger l'API Data Ameli pour afficher des données de santé réelles.</li>
+        <li>Proposer des tableaux, graphiques, indicateurs et comparaisons lisibles.</li>
+      </ul>
+    </article>
+
+    <article class="card about-card">
+      <div class="card-heading"><h2>Technologies utilisées</h2><span>Stack</span></div>
+      <ul class="clean-list">
+        <li>HTML, CSS et JavaScript pour l'interface.</li>
+        <li>Flask, Jinja2 et Blueprints pour le serveur web.</li>
+        <li>SQL, SQLAlchemy et SQLite/MySQL pour les données de référence.</li>
+        <li>API Data Ameli, Fetch API, Chart.js, Leaflet et GeoJSON.</li>
+      </ul>
+    </article>
+
+    <article class="card about-card">
+      <div class="card-heading"><h2>Sources de données</h2><span>Références</span></div>
+      <ul class="clean-list">
+        <li>Base SAE 2.04 : régions, départements, professions et postes de prescription.</li>
+        <li>API publique Data Ameli : effectifs, honoraires, prescriptions et pathologies.</li>
+        <li>GeoJSON des régions françaises pour la carte interactive.</li>
+      </ul>
+    </article>
+
+    <article class="card about-card">
+      <div class="card-heading"><h2>Architecture</h2><span>MVC</span></div>
+      <p>
+        Le projet sépare clairement les responsabilités : les modèles SQLAlchemy sont dans
+        <strong>models/</strong>, les routes Flask dans <strong>controllers/</strong>, les appels à l'API
+        dans <strong>services/</strong>, les pages Jinja2 dans <strong>templates/</strong>, et les fichiers
+        CSS/JavaScript/GeoJSON dans <strong>static/</strong>.
+      </p>
+    </article>
+  </section>
+</main>
+{% endblock %}

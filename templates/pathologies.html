@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block titre %}Pathologies - Data Santé{% endblock %}
+
+{% block contenu %}
+<main class="main">
+  <div class="page-heading"><p class="eyebrow">Analyse des pathologies</p><h1 class="section-title">Personnes concernées par pathologie</h1></div>
+  {% if pathologies_erreur %}<div class="alert">Le référentiel des pathologies est temporairement indisponible. Réessayez dans quelques instants.</div>{% endif %}
+  <section class="card comparison-card">
+    <form class="comparison-controls comparison-controls-wide" id="analysis-form" data-url="{{ url_for('api.analyse_pathologies') }}" data-departements-url="{{ url_for('api.departements', region_id=0) }}">
+      <div><label for="analysis-pathologie">Pathologie</label><select id="analysis-pathologie" name="pathologie" required>{% for pathologie in pathologies %}<option value="{{ pathologie }}">{{ pathologie }}</option>{% endfor %}</select></div>
+      <div><label for="analysis-region">Région</label><select id="analysis-region" name="region_id" required>{% for region in regions %}<option value="{{ region.id }}" {% if region.code == "84" %}selected{% endif %}>{{ region.display_libelle }}</option>{% endfor %}</select></div>
+      <div><label for="analysis-departement">Département</label><select id="analysis-departement" name="departement_id"><option value="">Toute la région</option></select></div>
+      <div><label for="analysis-year-start">Année de début</label><select id="analysis-year-start" name="annee_debut" required>{% for annee in annees|reverse %}<option value="{{ annee }}" {% if annee == 2018 %}selected{% endif %}>{{ annee }}</option>{% endfor %}</select></div>
+      <div><label for="analysis-year-end">Année de fin</label><select id="analysis-year-end" name="annee_fin" required>{% for annee in annees %}<option value="{{ annee }}" {% if annee == 2023 %}selected{% endif %}>{{ annee }}</option>{% endfor %}</select></div>
+      <button class="button" type="submit">Afficher les résultats</button>
+    </form>
+    <div class="comparison-status" id="analysis-status">Choisissez une pathologie et un territoire.</div>
+  </section>
+  <section class="dashboard-grid kpi-grid analysis-kpis">
+    <article class="metric-card"><span>Personnes concernées</span><strong id="analysis-total">-</strong><small>Dernière année de la période</small></article>
+    <article class="metric-card"><span>Prévalence</span><strong id="analysis-average">-</strong><small>Part rapportée à la population</small></article>
+    <article class="metric-card"><span>Territoire</span><strong id="analysis-territory">-</strong><small>Département ou agrégat régional</small></article>
+    <article class="metric-card"><span>Période</span><strong id="analysis-period">-</strong><small>Années analysées</small></article>
+  </section>
+  <section class="dashboard-grid two-columns">
+    <article class="card chart-card"><div class="card-heading"><h2>Évolution des personnes concernées</h2><span>Patients</span></div><div class="chart-panel"><canvas id="analysis-chart"></canvas></div></article>
+    <article class="card table-card"><div class="card-heading"><h2>Résultats par année</h2></div><table class="data-table" data-table-name="pathologies" id="analysis-table"><thead><tr><th>Année</th><th>Personnes concernées</th><th>Population</th><th>Prévalence (%)</th></tr></thead><tbody><tr><td colspan="4">Les résultats apparaîtront ici.</td></tr></tbody></table></article>
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.min.js') }}"></script>
+<script>window.analysisConfig = { kind: "pathologies", chartField: "personnes", chartLabel: "Personnes concernées", chartTitle: "Évolution annuelle des personnes concernées", axisLabel: "Personnes" };</script>
+<script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
+{% endblock %}

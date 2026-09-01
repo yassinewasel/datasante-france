@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block titre %}Accueil - Data Santé{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/leaflet/leaflet.css') }}">
+{% endblock %}
+
+{% block contenu %}
+<section class="hero compact-hero">
+  <h1>Visualisez les données du système de santé en France</h1>
+  <form class="search-card" action="#home-results" method="get" id="home-search-form" data-preview-url="{{ url_for('api.preview_effectifs') }}">
+    <label for="profession">Sélectionner une profession</label>
+    <select name="profession_id" id="profession" required>
+      <option value="">-- Choisir --</option>
+      {% for p in professions %}
+        <option value="{{ p.id }}">{{ p.libelle }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="form-grid">
+      <div>
+        <label for="region">Région</label>
+        <select name="region_id" id="region" required data-departements-url="{{ url_for('api.departements', region_id=0) }}">
+          <option value="">-- Choisir --</option>
+          {% for r in regions %}
+            <option value="{{ r.id }}" data-code="{{ r.code }}">{{ r.display_libelle }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="departement">Département</label>
+        <select name="departement_id" id="departement">
+          <option value="">-- Choisir une région --</option>
+        </select>
+      </div>
+      <div>
+        <label for="annee">Année</label>
+        <select name="annee" id="annee" required>
+          {% for a in annees %}
+            <option value="{{ a }}">{{ a }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button class="button" type="submit">Actualiser les vues</button>
+    </div>
+  </form>
+</section>
+
+<main class="main" id="statistiques">
+  <div class="home-layout">
+    <section class="card left-card map-card-wide">
+      <div class="card-heading"><h2>Carte et données territoriales</h2><span>Interactive</span></div>
+      <div class="map-content">
+      <div class="map-box">
+        <div
+          id="france-map"
+          class="france-map"
+          data-geojson-url="{{ url_for('static', filename='data/regions-france.geojson') }}"
+          data-departements-geojson-url="{{ url_for('static', filename='data/departements-france.geojson') }}"
+          aria-label="Carte interactive des régions et départements français"
+        ></div>
+      </div>
+      <div class="map-details" id="map-info">
+        <div>
+          <span>Territoire sélectionné</span>
+          <strong>Aucune sélection</strong>
+          <small>Le territoire choisi synchronise automatiquement les filtres.</small>
+        </div>
+        <div class="map-detail-kpis">
+          <div><span>Régions</span><strong>{{ regions|length }}</strong></div>
+          <div><span>Professions</span><strong>{{ professions|length }}</strong></div>
+          <div><span>Départements</span><strong id="selected-region-depts">-</strong></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section class="home-results" id="home-results">
+      <div class="card-heading"><h2>Résultats de la recherche</h2><span>Vue d'ensemble</span></div>
+      <div class="preview-kpis">
+        <article class="mini-kpi"><span>Effectif retenu</span><strong id="preview-effectif">-</strong><small>Nombre de professionnels pour l'année choisie.</small></article>
+        <article class="mini-kpi"><span>Densité retenue</span><strong id="preview-densite">-</strong><small>Rapport entre les professionnels et la population.</small></article>
+        <article class="mini-kpi"><span>Territoire</span><strong id="preview-territory">-</strong><small>Zone actuellement analysée.</small></article>
+        <article class="mini-kpi"><span>Variation annuelle</span><strong id="preview-variation">-</strong><small>Écart avec l'année précédente.</small></article>
+        <article class="mini-kpi"><span>Variation en %</span><strong id="preview-variation-pct">-</strong><small>Progression ou baisse en pourcentage.</small></article>
+        <article class="mini-kpi"><span>Effectif moyen</span><strong id="preview-average">-</strong><small>Moyenne calculée sur la période disponible.</small></article>
+      </div>
+      <div class="preview-summary" id="preview-summary">Les indicateurs apparaîtront ici dès que les filtres seront complétés.</div>
+      <div class="chart-title">Évolution des effectifs et de la densité</div>
+      <p class="view-description">Ce graphique montre si le nombre de professionnels augmente ou diminue dans le temps.</p>
+      <div class="chart-panel preview-chart"><canvas id="previewChart"></canvas></div>
+      <section class="dashboard-grid two-columns detail-panels">
+        <article class="card table-card">
+          <div class="card-heading"><h2>Résultat sélectionné</h2><span id="selection-points">Année</span></div>
+          <p class="view-description">Cette vue résume la valeur exacte pour l'année choisie.</p>
+          <div id="selection-table"><p class="empty">Aucune donnée à afficher pour le moment.</p></div>
+        </article>
+        <article class="card table-card">
+          <div class="card-heading"><h2>Repères statistiques</h2><span>Synthèse</span></div>
+          <p class="view-description">Cette vue aide à situer le résultat dans la période analysée.</p>
+          <div id="stats-table"><p class="empty">Les repères seront calculés après sélection.</p></div>
+        </article>
+        <article class="card table-card wide-card">
+          <div class="card-heading"><h2>Historique complet</h2><span id="history-points">0 point</span></div>
+          <p class="view-description">Cette vue liste toutes les années disponibles pour suivre l'évolution.</p>
+          <div id="history-table"><p class="empty">Aucun historique chargé.</p></div>
+        </article>
+      </section>
+    </section>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+window.regionStats = {{ region_stats|tojson }};
+window.departmentStats = {{ departement_stats|tojson }};
+</script>
+<script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/leaflet/leaflet.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cascade.js') }}"></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+{% endblock %}

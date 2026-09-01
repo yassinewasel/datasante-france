@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titre %}DataSanté{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="page">
+    <div class="topbar"></div>
+    <header class="nav">
+      <a class="brand" href="{{ url_for('accueil.index') }}">
+        <span class="brand-icon" aria-hidden="true"></span>
+        <span class="brand-title">DataSanté</span>
+      </a>
+      <nav class="menu" aria-label="Navigation principale">
+        <a href="{{ url_for('accueil.index') }}" class="{% if request.endpoint == 'accueil.index' %}active{% endif %}">Accueil</a>
+        <a href="{{ url_for('dashboard.pathologies') }}" class="{% if request.endpoint == 'dashboard.pathologies' %}active{% endif %}">Pathologies</a>
+        <a href="{{ url_for('dashboard.honoraires') }}" class="{% if request.endpoint == 'dashboard.honoraires' %}active{% endif %}">Honoraires</a>
+        <a href="{{ url_for('dashboard.prescriptions') }}" class="{% if request.endpoint == 'dashboard.prescriptions' %}active{% endif %}">Prescriptions</a>
+        <a href="{{ url_for('dashboard.indicateurs') }}" class="{% if request.endpoint == 'dashboard.indicateurs' %}active{% endif %}">Indicateurs</a>
+        <a href="{{ url_for('dashboard.comparaisons') }}" class="{% if request.endpoint == 'dashboard.comparaisons' %}active{% endif %}">Comparaisons</a>
+        <a href="{{ url_for('dashboard.a_propos') }}" class="{% if request.endpoint == 'dashboard.a_propos' %}active{% endif %}">À propos</a>
+      </nav>
+    </header>
+
+    {% if demo_mode %}<div class="demo-badge">Données de démonstration synthétiques</div>{% endif %}
+    {% block contenu %}{% endblock %}
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-brand">DataSanté</div>
+        <nav class="footer-links" aria-label="Liens de pied de page">
+          <a href="{{ url_for('accueil.index') }}">Accueil</a>
+          <a href="{{ url_for('dashboard.comparaisons') }}">Comparaisons</a>
+          <a href="{{ url_for('dashboard.a_propos') }}">À propos</a>
+          <a href="https://data.ameli.fr/" target="_blank" rel="noreferrer">Data Ameli</a>
+        </nav>
+      </div>
+      <div class="footer-copyright">
+        © 2026 DataSanté - {% if demo_mode %}Valeurs synthétiques{% else %}Données Data Ameli{% endif %}
+      </div>
+    </footer>
+  </div>
+  <script src="{{ url_for('static', filename='js/tables.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

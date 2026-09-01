@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block titre %}Indicateurs - Data Santé{% endblock %}
+
+{% block contenu %}
+<main class="main">
+  <div class="page-heading">
+    <p class="eyebrow">Indicateurs clés</p>
+    <h1 class="section-title">Synthèse utile du projet</h1>
+  </div>
+
+  <section class="dashboard-grid kpi-grid">
+    <article class="metric-card">
+      <span>Territoires couverts</span>
+      <strong>{{ kpis.regions }}</strong>
+      <small>régions disponibles dans la base</small>
+    </article>
+    <article class="metric-card">
+      <span>Départements analysables</span>
+      <strong>{{ kpis.departements }}</strong>
+      <small>dont métropole et DROM</small>
+    </article>
+    <article class="metric-card">
+      <span>Professions suivies</span>
+      <strong>{{ kpis.professions }}</strong>
+      <small>spécialités et regroupements santé</small>
+    </article>
+    <article class="metric-card">
+      <span>Période exploitable</span>
+      <strong>2015-2023</strong>
+      <small>années proposées dans les filtres</small>
+    </article>
+  </section>
+
+  <section class="dashboard-grid kpi-grid">
+    <article class="metric-card">
+      <span>Postes de prescription</span>
+      <strong>{{ kpis.prescriptions }}</strong>
+      <small>médicaments, transports, soins...</small>
+    </article>
+    <article class="metric-card">
+      <span>Types d'honoraires</span>
+      <strong>{{ kpis.honoraires }}</strong>
+      <small>dépassements, taux et moyens</small>
+    </article>
+    <article class="metric-card">
+      <span>Types d'exercice</span>
+      <strong>{{ kpis.exercices }}</strong>
+      <small>modes d'activité référencés</small>
+    </article>
+    <article class="metric-card">
+      <span>Filtres démographiques</span>
+      <strong>{{ ages|length }}</strong>
+      <small>tranches d'âge disponibles</small>
+    </article>
+  </section>
+
+  <section class="dashboard-grid two-columns">
+    <article class="card chart-card">
+      <div class="card-heading"><h2>Départements par région</h2><span>Top 8</span></div>
+      <div class="chart-panel"><canvas id="kpiRegions"></canvas></div>
+    </article>
+    <article class="card chart-card">
+      <div class="card-heading"><h2>Familles de professions</h2><span>Répartition</span></div>
+      <div class="chart-panel"><canvas id="kpiProfessions"></canvas></div>
+    </article>
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.min.js') }}"></script>
+<script>
+window.dashboardCharts = [
+  {
+    id: "kpiRegions",
+    type: "bar",
+    data: {
+      labels: {{ top_regions|map(attribute='Region.libelle')|list|tojson }},
+      datasets: [{ label: "Départements", data: {{ top_regions|map(attribute='departements_count')|list|tojson }}, backgroundColor: "#63b9eb", borderRadius: 8 }]
+    },
+    scales: { y: { beginAtZero: true } }
+  },
+  {
+    id: "kpiProfessions",
+    type: "doughnut",
+    data: {
+      labels: {{ profession_groups.keys()|list|tojson }},
+      datasets: [{ data: {{ profession_groups.values()|list|tojson }}, backgroundColor: ["#53bd7f", "#63b9eb", "#f2c64a", "#ef8278"] }]
+    }
+  }
+];
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

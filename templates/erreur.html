@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block titre %}Erreur - Data Santé{% endblock %}
+
+{% block contenu %}
+<main class="main">
+  <section class="card error-card">
+    <h1>Oups...</h1>
+    <p>{{ message }}</p>
+    <a class="secondary-button" href="{{ url_for('accueil.index') }}">Retour à l'accueil</a>
+  </section>
+</main>
+{% endblock %}
