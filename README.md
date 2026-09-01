@@ -2,6 +2,8 @@
 
 Application Flask d'exploration et de comparaison de donnees de sante en France. Le depot propose une demonstration SQLite reproductible et hors ligne, ainsi qu'un mode reel configurable utilisant l'API Data Ameli.
 
+![Accueil DataSante](docs/images/home.png)
+
 ## Fonctionnalites
 
 - filtres region, departement, profession et periode ;
@@ -9,6 +11,14 @@ Application Flask d'exploration et de comparaison de donnees de sante en France.
 - comparaisons, graphiques Chart.js, tableaux et carte Leaflet ;
 - base de demonstration synthetique generee localement ;
 - client Data Ameli conserve pour un usage reel explicite.
+
+## Captures
+
+| Comparaisons | Indicateurs |
+| --- | --- |
+| ![Comparaisons](docs/images/comparisons.png) | ![Indicateurs](docs/images/indicators.png) |
+
+![Honoraires](docs/images/honoraires.png)
 
 ## Demarrage rapide - PowerShell
 
@@ -51,16 +61,16 @@ pip install -r requirements-dev.txt
 python -m pytest -v -p no:cacheprovider
 ```
 
-## Projet collectif et contribution
+GitHub Actions execute automatiquement cette suite hors ligne sur chaque push et pull request.
 
-Le projet initial a ete realise par Abdelwadoud Alloune, Abdou Apela Akunde, Djibril Berriche et Yassine Wasel dans le cadre du BUT Informatique.
+## Auteur
 
-Contributions documentees de Yassine Wasel : maquette et structure UX, collecte des dimensions `type_exercice` et `type_secteur` avec Requests et SQLAlchemy, deduplication, documentation, tests Flask limites et preparation de presentation. Le README historique attribue aussi a Yassine une contribution a la page Comparaisons et a ses graphiques Chart.js, sans historique assez granulaire pour attribuer chaque ligne.
-
-Cette edition nettoyee ne revendique pas comme travail individuel les autres fonctionnalites collectives.
+Projet personnel de Yassine Wasel, realise dans le cadre du BUT Informatique. Une autre version de travail en groupe existe separement et n'est pas publiee dans ce depot.
 
 ## Donnees et licences
 
 Voir [docs/data-sources.md](docs/data-sources.md). Data Ameli et les contours administratifs sont sous ODbL 1.0. Chart.js est sous MIT et Leaflet sous BSD-2-Clause.
 
-La licence du code collectif doit etre choisie avec l'accord des quatre coauteurs avant publication publique.
+## Licence du code
+
+Le code est publie sous licence [MIT](LICENSE), copyright Yassine Wasel. Les donnees et bibliotheques tierces conservent leurs propres licences.

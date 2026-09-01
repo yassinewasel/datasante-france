@@ -1,0 +1,32 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Initialize synthetic demo database
+        env:
+          APP_MODE: demo
+          DATABASE_URL: sqlite:///data/datasante_demo.db
+          SECRET_KEY: ci-test-only
+        run: python -m scripts.init_demo_db --force
+      - name: Run offline tests
+        env:
+          APP_MODE: demo
+          DATABASE_URL: sqlite:///data/datasante_demo.db
+          SECRET_KEY: ci-test-only
+        run: python -m pytest -v -p no:cacheprovider

@@ -17,4 +17,4 @@ Les contours regionaux et departementaux proviennent du jeu [Contours administra
 - Chart.js 4.4.7 : licence MIT.
 - Leaflet 1.9.4 : licence BSD-2-Clause.
 
-Les licences des donnees et bibliotheques tierces ne determinent pas la licence du code collectif DataSante.
+Les licences des donnees et bibliotheques tierces restent distinctes de la licence MIT du code DataSante.
