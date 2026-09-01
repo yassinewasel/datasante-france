@@ -15,6 +15,10 @@ Application Flask d'exploration et de comparaison de donnees de sante en France.
 
 ## Captures
 
+### Carte interactive
+
+<img src="docs/images/map.png" alt="Carte interactive des territoires de sante" width="700">
+
 | Comparaisons | Indicateurs |
 | --- | --- |
 | <img src="docs/images/comparisons.png" alt="Comparaisons" width="440"> | <img src="docs/images/indicators.png" alt="Indicateurs" width="440"> |
